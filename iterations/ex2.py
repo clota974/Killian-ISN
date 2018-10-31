@@ -14,7 +14,8 @@ N = -1 # Initialisation pour que N==0 lors de la première boucle
 f = -1
 while not(f>p): # On cherche à arrêter quand f>p
     N += 1
-    f = abs(U(N)-10) #<==> |U(N)-10| 
+    f = abs(10-U(N)) #<==> |10-U(N)|
+    ##### !!!! Il etait ecrit dans l'exercice U(N)-10 : est-ce une erreur ?
 
 
 print(U(N))
