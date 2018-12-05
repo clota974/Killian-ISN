@@ -12,7 +12,8 @@ Le perdant est celui qui prend le dernier bâton.
 #### Paramètrage
 Le programme sera personnalisable et demandera :
 1) Le nom du J1 et du J2
-2) Le nombre de bâtons voulu (Par défaut : 10)
+2) Le nombre de bâtons voulu  (2<x<21 Par défaut 
+: 10)
 
 #### Jeu
 Le joueur qui commence sera choisi au hasard.
@@ -49,10 +50,10 @@ Le nombre de bâtons sera stocké dans une variable nommée nbr_batons.
 Le nombre de bâtons sera stocké avant le jeu
 
 ##### Affichage des bâtons
-Nous afficherons les bâtons restant sur une même ligne grâce au caractère ASCII 124 (Barre verticale) : `|`
+Nous afficherons les bâtons restants sur une même ligne grâce au caractère ASCII 124 (Barre verticale) : `|`
 
 #### Enlever des bâtons
-On soustraira le nombre de bâtons enlevé au nombre de bâtons présents : `nbr_batons = input_joueur - nbr_batons`
+On soustraira le nombre de bâtons enlevés au nombre de bâtons présents : `nbr_batons = input_joueur - nbr_batons`
 
 Il faudra faire attention à ne pas enlever plus de bâtons qu'il en reste.
 
