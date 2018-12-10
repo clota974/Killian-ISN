@@ -1,11 +1,11 @@
+# coding: utf8
+
 from random import choice
 from datetime import datetime, timedelta
 
 # Variables qui sont destinées à être constantes après initialisation
 # Paramètres de personnalisation du jeu
-### ATTENTION nom_j1 correspond à noms[0]
-nom_j1 = ""
-nom_j2 = ""
+### ATTENTION nom du j1 correspond à noms[0]
 noms = [] # Liste des deux noms des joueurs : permet d'accéder plus facilement aux deux variables et gérer la portée d'une seule variable
 nbr_batons = 10 # Nombre qui peut changer
 
@@ -15,7 +15,7 @@ baton_img = "|"
 ### Variables "systèmes"
 tour_j = 0 # 1 ==> Tour J1
 nbr_tour = 0
-heureDepart = -1 # -1 tant que pas initialisé
+heure_depart = -1 # -1 tant que pas initialisé
 
 
 ### Début déclarations de fonctions ###
@@ -43,7 +43,7 @@ def choisirParams():
     noms = [nom_j1, nom_j2]
 
     """
-    
+    Retirer les bâtons seulement si le nombre de bâtons est correct (2<x<21) 
     """
     try:
         nbr_batons = int(input("Entrez le nombre de bâtons ( 2<x<21 ; défaut: 10): "))
@@ -67,10 +67,10 @@ def commencerNvJeu():
         None
     """
 
-    global tour_j, heureDepart
+    global tour_j, heure_depart
     tour_j = choice([0,1]) # Choisit quel joueur commence
     
-    heureDepart = datetime.now()
+    heure_depart = datetime.now()
 
 
 def play(tour):
@@ -81,7 +81,7 @@ def play(tour):
         tour (int): Numéro d'identification
     
     Returns: 
-        bool: 
+        bool: True si aucun problème
     """
 
     ### ATTENTION tour est une variable locale tandis que tour_j est une variable globales
@@ -99,7 +99,7 @@ def play(tour):
     print(afficherBatons())
 
     input_joueur = -1 # Indique que le nombre de bâtons retirés est incorrect si -1
-    while(input_joueur == -1):
+    while(input_joueur == -1): # Tant que le nombre de bâtons à retirer est incorrect
         try:
             input_joueur = int(input("Combien de bâtons voulez-vous retirer? (1 à 3) : "))
 
@@ -113,8 +113,7 @@ def play(tour):
                 print(estCorrect[1])
                 raise ValueError(estCorrect[0])
             
-        except Exception as msg: 
-            print(msg)
+        except Exception as msg:
             if(str(msg) == "Interval"):
                 output_msg = "Chiffre non compris entre 1 et 3!"
             elif(str(msg) =="PlusDeBaton"):
@@ -128,10 +127,20 @@ def play(tour):
 
 
 def retirerBatons(input_joueur):
+    """
+    Retire les bâtons
+
+    Args:
+        input_joueur (int): Nombre de bâtons à enlever
+
+    Returns:
+        bool: True si pas d'erreur
+        list: Description de l'erreur ==> [Titre, Description]
+
+    """
+
     global nbr_batons
     
-    # Si erreur : return Error
-    # Si pas erreur : return True
     if(nbr_batons-input_joueur<1):
         interval_batons_max = 3
         if(nbr_batons<4):
@@ -143,10 +152,20 @@ def retirerBatons(input_joueur):
 
        
     else:
-        nbr_batons -= input_joueur
+        nbr_batons -= input_joueur # Enleve les bâtons
         return True
 
 def afficherBatons():
+    """
+    Retourne le tableau de jeu (les bâtons) à afficher
+
+    Args:
+        None
+
+    Returns:
+        str: Le tableau de jeu (" ||| ")
+    """
+
     str_batons = ""
 
     for i in range(nbr_batons):
@@ -156,6 +175,16 @@ def afficherBatons():
 
 
 def terminerTour():
+    """
+    Vérifie si le jeu est terminé et change de joueur
+
+    Args:
+        None
+    
+    Returns:
+        bool: Si le jeu est terminé
+    """
+
     global tour_j
     if(siJeuTermine()):
         terminerJeu(tour_j)
@@ -167,13 +196,29 @@ def terminerTour():
  
 
 def siJeuTermine():
+    """
+    Returns:
+        bool: Si le jeu est terminé
+    """
+
     global nbr_batons
     return nbr_batons == 1 # True ou False
 
 def terminerJeu(gagnant):
+    """
+    Termine le jeu en affichant le vainqueur et les variables
 
-    heureFin = datetime.now()
-    tempsJeu = heureFin - heureDepart
+    Args:
+        gagnant (int): ID du joueur
+
+    Returns:
+        None
+
+    """
+
+
+    heureFin = datetime.now() # ==> Timedelta
+    tempsJeu = heureFin - heure_depart
 
     print("\n\n")
     print("FIN DU JEU")
@@ -184,12 +229,13 @@ def terminerJeu(gagnant):
     secs = tempsJeu.seconds%60
     print("Temps : {} mins et {}s".format(minutes, secs))
 
-### Début du jeu
+
+### Début du jeu ###
 
 choisirParams()
 commencerNvJeu()
 
-finDuJeu = False
-while(not finDuJeu): # Voir les difficultés rencontrées
-    play(tour_j)
-    finDuJeu = terminerTour()
+fin_du_jeu = False
+while(not fin_du_jeu): # Voir les difficultés rencontrées
+    play(tour_j) # Joueur
+    fin_du_jeu = terminerTour() # Test si le jeu est terminé, auquel cas, il le termine
