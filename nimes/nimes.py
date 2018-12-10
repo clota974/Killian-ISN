@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 ### ATTENTION nom_j1 correspond à noms[0]
 nom_j1 = ""
 nom_j2 = ""
-noms = []
-nbr_batons = 10
+noms = [] # Liste des deux noms des joueurs : permet d'accéder plus facilement aux deux variables et gérer la portée d'une seule variable
+nbr_batons = 10 # Nombre qui peut changer
 
 ### Constantes
 baton_img = "|"
@@ -15,20 +15,36 @@ baton_img = "|"
 ### Variables "systèmes"
 tour_j = 0 # 1 ==> Tour J1
 nbr_tour = 0
-heureDepart = -1
+heureDepart = -1 # -1 tant que pas initialisé
 
 
 ### Début déclarations de fonctions ###
+
 def choisirParams():
+    """
+    Demande les paramètres de noms, de temps et de bâtons
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    """
+
     global noms, nbr_batons
     nom_j1 = input("Entrez le nom du J1 : ")
     nom_j2 = input("Entrez le nom du J2 : ")
 
+    # Gestion du nom par défaut
     nom_j1 = nom_j1 or "J1"
     nom_j2 = nom_j2 or "J2"
 
     noms = [nom_j1, nom_j2]
 
+    """
+    
+    """
     try:
         nbr_batons = int(input("Entrez le nombre de bâtons ( 2<x<21 ; défaut: 10): "))
         if(not 2<nbr_batons<21):
@@ -41,6 +57,16 @@ def choisirParams():
 
 
 def commencerNvJeu():
+    """
+    Démarre un nouveau jeu en chosissant le tour du joueur et stocke l'heure de départ
+
+    Args:
+        None
+    
+    Returns:
+        None
+    """
+
     global tour_j, heureDepart
     tour_j = choice([0,1]) # Choisit quel joueur commence
     
@@ -48,6 +74,16 @@ def commencerNvJeu():
 
 
 def play(tour):
+    """
+    Fait jouer un tour à un joueur
+
+    Args:
+        tour (int): Numéro d'identification
+    
+    Returns: 
+        bool: 
+    """
+
     ### ATTENTION tour est une variable locale tandis que tour_j est une variable globales
     global tour_j, nbr_tour
     print("\n\n")
@@ -137,15 +173,16 @@ def siJeuTermine():
 def terminerJeu(gagnant):
 
     heureFin = datetime.now()
-    tempsJeu = heureFin - heureDepart + timedelta(minutes=1)
+    tempsJeu = heureFin - heureDepart
 
     print("\n\n")
     print("FIN DU JEU")
     print("Bravo " + noms[gagnant])
     print("Nombre de tours : ", nbr_tour)
 
-    print("Temps : {minutes} mins et {secs}s".format( minutes=int(tempsJeu.seconds%60) , secs=int(tempsJeu.seconds/60) ) )
-
+    minutes = int(tempsJeu.seconds/60)
+    secs = tempsJeu.seconds%60
+    print("Temps : {} mins et {}s".format(minutes, secs))
 
 ### Début du jeu
 
@@ -153,6 +190,6 @@ choisirParams()
 commencerNvJeu()
 
 finDuJeu = False
-while(not finDuJeu):
+while(not finDuJeu): # Voir les difficultés rencontrées
     play(tour_j)
     finDuJeu = terminerTour()
